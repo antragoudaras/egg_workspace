@@ -12,6 +12,6 @@
 
 set -e
 
-conda activate ./env
+conda activate ../env
 
 python extend_high_freq.py "$1" "$2"
