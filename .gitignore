@@ -1,0 +1,14 @@
+#ignore pdfs
+*.pdf
+#ignore doxc
+*.docx
+#ignore pngs
+*.png
+#ignore unwaned/old files
+*.ipynb
+
+#ingore files & folders
+*.xlsx
+launch_training*
+test2*
+training*
