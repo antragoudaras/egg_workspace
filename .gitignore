@@ -2,6 +2,7 @@
 *.pdf
 #ignore doxc
 *.docx
+*.jpeg
 #ignore pngs
 *.png
 #ignore unwaned/old files
