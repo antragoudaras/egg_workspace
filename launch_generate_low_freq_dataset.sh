@@ -14,6 +14,7 @@ mkdir -p "$JOB_RESULTS_DIR"
 for counter in {1..10..1}
 do
     JOB_NAME=low_freq_dataset_${counter}_out_of_10
+    echo "$JOB_NAME"
     sbatch --job-name "$JOB_NAME" "$SRC_DIR"/generate_high_freq_dataset.sbatch --save-dataset "./$JOB_NAME.xlsx"
 done
 
