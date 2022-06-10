@@ -11,11 +11,11 @@ SRC_DIR="$PROJECT_DIR"
 JOB_RESULTS_DIR="$PROJECT_DIR"/results_low_freq
 mkdir -p "$JOB_RESULTS_DIR"
 
-for counter in {1..80..1}
+for counter in {1..70..1}
 do
     JOB_NAME=low_freq_dataset_${counter}_out_of_80
     echo "$JOB_NAME"
     sbatch --job-name "$JOB_NAME" "$SRC_DIR"/generate_low_freq_dataset.sbatch --save-dataset "./$JOB_NAME.xlsx"
 done
 
-echo "Generating 2000th lines of low freq dataset"
+echo "Generating 7000 lines of low freq dataset"
