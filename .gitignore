@@ -8,7 +8,6 @@
 *.ipynb
 
 #ingore files & folders
-*.xlsx
 launch_training*
 test2*
 training*
