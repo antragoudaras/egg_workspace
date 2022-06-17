@@ -8,7 +8,7 @@ PROJECT_DIR="$PWD"
 
 # project should have a src directory
 SRC_DIR="$PROJECT_DIR"
-JOB_RESULTS_DIR="$PROJECT_DIR"/validate_prime_optimized_results_high_freq
+JOB_RESULTS_DIR="$PROJECT_DIR"/validate_prime_optimized_results_high_freq_1000batch_size
 mkdir -p "$JOB_RESULTS_DIR"
 
 if [ $# -eq 0 ]

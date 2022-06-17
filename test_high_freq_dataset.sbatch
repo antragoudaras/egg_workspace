@@ -7,8 +7,8 @@
 #SBATCH --constraint=intel
 #SBATCH --partition=batch
 #SBATCH --mail-type=ALL
-#SBATCH --output=./validate_prime_optimized_results_high_freq/%x-%j-slurm.out
-#SBATCH --error=./validate_prime_optimized_results_high_freq/%x-%j-slurm.err
+#SBATCH --output=./validate_prime_optimized_results_high_freq_1000batch_size/%x-%j-slurm.out
+#SBATCH --error=./validate_prime_optimized_results_high_freq_1000batch_size/%x-%j-slurm.err
 
 set -e
 
