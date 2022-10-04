@@ -14,4 +14,4 @@ set -e
 
 conda activate ../env
 
-python extend_flexion_fingers_cropped.py "$1" "$2"
+python extend_flexion_fingers_cropped.py "$@"
