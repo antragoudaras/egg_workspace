@@ -25,13 +25,9 @@ import time
 import random
 import argparse
 
-
-
-parser = argparse.ArgumentParser("Generating FLexion Fingers BCIC IV 4 ECoG Dataset parser")
-parser.add_argument("--save-dataset", type=str, default='./dataset_bci_iv_4_ECoG_default.xlsx', help="The path where the generated dataset will be stored")
+parser = argparse.ArgumentParser("Generating BCI IV 4 ECoG parser")
+parser.add_argument("--load-dataset", type=str, default='./random_dataset_optimized_high_freq.xlsx', help="The path where the generated dataset will be stored")
 args = parser.parse_args()
-
-
 
 def np_to_th(
     X, requires_grad=False, dtype=None, pin_memory=False, **tensor_kwargs
@@ -141,29 +137,13 @@ def squeeze_final_output(x):
     if x.size()[2] == 1:
         x = x[:, :, 0]
     return x
-#update r2 valid score / accuracy
-d = {'n_filters_time': [40], 'filter_time_length': [25], 'n_filters_spat': [40], 'pool_time_length': [75], 'pool_time_stride': [15], 'drop_prob': [0.5], 'learning_rate_range': [0.0625], 'decay_range': [0], 'accuracy': []}
-df = pd.DataFrame(data=d)
 
-n_filters_time = list((range(25,55)))
-filter_time_length = list((range(10,36)))
-n_filters_spat = list((range(25,54)))
-pool_time_length = list((range(50,83)))
-pool_time_stride = list((range(10,30)))
-drop_prob = list((np.linspace(0.2,0.8,7)))
-learning_rate_range = list((np.linspace(0.0125, 0.0925, 9)))
-decay_range = list(np.linspace(0, 0.0009, 9))
+df = pd.read_excel(args.load_dataset, index_col=0)
+#update
+accuracy = [0.66,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
+df['accuracy'] = accuracy
 
-for j in range(100):
-    df2 = pd.DataFrame({'n_filters_time': [n_filters_time[random.randint(0,len(n_filters_time)-1)]], 'filter_time_length': [filter_time_length[random.randint(0,len(filter_time_length)-1)]], 'n_filters_spat': [n_filters_spat[random.randint(0,len(n_filters_spat)-1)]], 'pool_time_length': [pool_time_length[random.randint(0,len(pool_time_length)-1)]], 'pool_time_stride': [pool_time_stride[random.randint(0,len(pool_time_stride)-1)]], 'drop_prob': [drop_prob[random.randint(0,len(drop_prob)-1)]], 'learning_rate_range': [learning_rate_range[random.randint(0,len(learning_rate_range)-1)]], 'decay_range': [decay_range[random.randint(0,len(decay_range)-1)]]})
-    df = pd.concat([df, df2], ignore_index = True, axis = 0)
-
-dfCopy = df.copy()
-dfCopy.to_excel(f"copy_initial_{args.save_dataset}")
-
-start = time.time()
-
-for j in range(100):
+for j in range(25):
     print("ARCHITECTURE", j+1)
     class kostas(nn.Sequential):
         """Shallow ConvNet model from Schirrmeister et al 2017.
@@ -188,11 +168,11 @@ for j in range(100):
             in_chans,
             n_classes,
             input_window_samples=None,
-            n_filters_time=int(df.iloc[j+1]['n_filters_time']),
-            filter_time_length=int(df.iloc[j+1]['filter_time_length']),
-            n_filters_spat=int(df.iloc[j+1]['n_filters_spat']),
-            pool_time_length=int(df.iloc[j+1]['pool_time_length']),
-            pool_time_stride=int(df.iloc[j+1]['pool_time_stride']),
+            n_filters_time=int(df.iloc[j]['param_1']),
+            filter_time_length=int(df.iloc[j]['param_2']),
+            n_filters_spat=int(df.iloc[j]['param_3']),
+            pool_time_length=int(df.iloc[j]['param_4']),
+            pool_time_stride=int(df.iloc[j]['param_5']),
             final_conv_length=30,
             conv_nonlin=square,
             pool_mode="mean",
@@ -200,7 +180,7 @@ for j in range(100):
             split_first_layer=True,
             batch_norm=True,
             batch_norm_alpha=0.1,
-            drop_prob=df.iloc[j+1]['drop_prob'],
+            drop_prob=df.iloc[j]['param_6']/10,
         ):
             super().__init__()
             if final_conv_length == "auto":
@@ -530,8 +510,8 @@ for j in range(100):
         # lr = 0.0625 * 0.01
         # weight_decay = 0
 
-        lr = df.iloc[j+1]['learning_rate_range']
-        weight_decay = df.iloc[j+1]['decay_range']
+        lr = df.iloc[j]['param_7']
+        weight_decay = df.iloc[j+1]['param_8']
         
         # For deep4 they should be:
         # lr = 1 * 0.01
@@ -572,6 +552,7 @@ for j in range(100):
         ######################################################################
         # Model training for a specified number of epochs. ``y`` is None as it is already supplied
         # in the dataset.
+        print("ARCHITECTURE ",j, "SUBJECT ", i+1)
         regressor.fit(train_set, y=None, epochs=n_epochs)
 
         results_columns = ['r2_train', 'r2_valid', 'train_loss', 'valid_loss']
@@ -583,9 +564,15 @@ for j in range(100):
         return sum(lst) / len(lst)
 
     average = Average(avgList)
-    df.at[j+1, 'accuracy'] = average
+    print(average)
+    df.at[j, "accuracy"] = average
 
-df.to_excel(args.save_dataset)
-end = time.time()
+prefix = None
+if "random_dataset_" in args.load_dataset:
+	prefix = "random_set"
+elif "train_dataset_" in args.load_dataset:
+	prefix = "train_set"
+elif "val_dataset_" in args.load_dataset:
+	prefix = "val_set"
 
-print("TIME (sec)", end-start)
+df.to_excel(f"{prefix}BCI_IV_4_ECoG_actual_results_positive_COM.xlsx")
