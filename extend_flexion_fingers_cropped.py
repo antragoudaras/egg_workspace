@@ -141,7 +141,7 @@ def squeeze_final_output(x):
     if x.size()[2] == 1:
         x = x[:, :, 0]
     return x
-
+#update r2 valid score / accuracy
 d = {'n_filters_time': [40], 'filter_time_length': [25], 'n_filters_spat': [40], 'pool_time_length': [75], 'pool_time_stride': [15], 'drop_prob': [0.5], 'learning_rate_range': [0.0625], 'decay_range': [0], 'accuracy': [0.66678346]}
 df = pd.DataFrame(data=d)
 

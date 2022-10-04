@@ -307,8 +307,8 @@ for j in range(10):
                                 index=regressor.history[:, 'epoch'])
         accuracy_individual_list.append(score_df.r2_valid[n_epochs])
 
-    print('Iteration_{j}: Average r2 valid list for subject_{i} : {}'.format(j,i,accuracy_individual_list))
-    print('Iteration_{j}: Average r2 valid score: {i}'.format(j,i,np.array(accuracy_individual_list).mean()))
+    print('Iteration_{}: Average r2 valid list for subject_{} : {}'.format(j,i,accuracy_individual_list))
+    print('Iteration_{}: Average r2 valid score for subject_{} : {}'.format(j,i,np.array(accuracy_individual_list).mean()))
     average_final_list.append(np.asscalar(np.array(accuracy_individual_list).mean()))
 
 print('Final list with r2 averge score: {}'.format(average_final_list))
