@@ -142,7 +142,7 @@ def squeeze_final_output(x):
         x = x[:, :, 0]
     return x
 #update r2 valid score / accuracy
-d = {'n_filters_time': [40], 'filter_time_length': [25], 'n_filters_spat': [40], 'pool_time_length': [75], 'pool_time_stride': [15], 'drop_prob': [0.5], 'learning_rate_range': [0.0625], 'decay_range': [0], 'accuracy': []}
+d = {'n_filters_time': [40], 'filter_time_length': [25], 'n_filters_spat': [40], 'pool_time_length': [75], 'pool_time_stride': [15], 'drop_prob': [0.5], 'learning_rate_range': [0.0625], 'decay_range': [0], 'accuracy': [0.66872591]}
 df = pd.DataFrame(data=d)
 
 n_filters_time = list((range(25,55)))
@@ -531,6 +531,7 @@ for j in range(100):
         # weight_decay = 0
 
         lr = df.iloc[j+1]['learning_rate_range']
+        # lr = df.iloc[j+1]['learning_rate_range'] * 0.01 #rember to test it with 0.01 multiplyer
         weight_decay = df.iloc[j+1]['decay_range']
         
         # For deep4 they should be:
