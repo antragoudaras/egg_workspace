@@ -6,4 +6,6 @@ h5py
 skorch
 joblib
 mne
+braindecode
+moabb
 openpyxl

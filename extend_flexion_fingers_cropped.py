@@ -28,7 +28,7 @@ import argparse
 
 
 parser = argparse.ArgumentParser("Generating FLexion Fingers BCIC IV 4 ECoG Dataset parser")
-parser.add_argument("--save-dataset", type=str, default='./dataset_bci_iv_4_ECoG.xlsx', help="The path where the generated dataset will be stored")
+parser.add_argument("--save-dataset", type=str, default='./dataset_bci_iv_4_ECoG_default.xlsx', help="The path where the generated dataset will be stored")
 args = parser.parse_args()
 
 
@@ -431,6 +431,7 @@ for j in range(100):
         device = 'cuda' if cuda else 'cpu'
         if cuda:
             torch.backends.cudnn.benchmark = True
+            print("You're utilzing your CUDA cores!!!")
         # Set random seed to be able to roughly reproduce results
         # Note that with cudnn benchmark set to True, GPU indeterminism
         # may still make results substantially different between runs.
