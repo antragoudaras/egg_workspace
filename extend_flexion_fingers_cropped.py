@@ -159,7 +159,7 @@ for j in range(100):
     df = pd.concat([df, df2], ignore_index = True, axis = 0)
 
 dfCopy = df.copy()
-dfCopy.to_excel("copy_bci_iv_ECoG_dataset.xlsx")
+dfCopy.to_excel(f"copy_initial_{args.save_dataset}")
 
 start = time.time()
 

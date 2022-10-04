@@ -13,8 +13,20 @@ import copy
 import pandas as pd
 import numpy as np
 import sklearn
+import torch
+from braindecode.util import set_random_seeds
+from braindecode.models import ShallowFBCSPNet
 from mne import set_log_level
 from braindecode.datasets import BCICompetitionIVDataset4
+from braindecode.models import to_dense_prediction_model, get_output_shape
+from braindecode.preprocessing import create_fixed_length_windows
+from skorch.callbacks import LRScheduler
+from skorch.helper import predefined_split
+from braindecode.training import TimeSeriesLoss
+from braindecode import EEGRegressor
+from braindecode.training import CroppedTimeSeriesEpochScoring
+from braindecode.preprocessing import (
+        exponential_moving_standardize, preprocess, Preprocessor)
 
 accuracy_list = []
 for i in range(3):
@@ -55,9 +67,6 @@ for i in range(3):
     #    `torchvision <https://pytorch.org/docs/stable/torchvision/index.html>`__.
     #
 
-
-    from braindecode.preprocessing import (
-        exponential_moving_standardize, preprocess, Preprocessor)
 
     low_cut_hz = 1.  # low cut frequency for filtering
     high_cut_hz = 200.  # high cut frequency for filtering, for ECoG higher than for EEG
@@ -134,15 +143,12 @@ for i in range(3):
     # `nn.Module <https://pytorch.org/docs/stable/nn.html#torch.nn.Module>`__.
     #
 
-    import torch
-    from braindecode.util import set_random_seeds
-    from braindecode.models import ShallowFBCSPNet
-
     cuda = torch.cuda.is_available()  # check if GPU is available, if True chooses to use it
     # cuda = False
     device = 'cuda' if cuda else 'cpu'
     if cuda:
         torch.backends.cudnn.benchmark = True
+        print("You're utilizing your CUDA cores!!!")
     # Set random seed to be able to roughly reproduce results
     # Note that with cudnn benchmark set to True, GPU indeterminism
     # may still make results substantially different between runs.
@@ -173,8 +179,6 @@ for i in range(3):
     if cuda:
         model.cuda()
 
-    from braindecode.models import to_dense_prediction_model, get_output_shape
-
     to_dense_prediction_model(model)
 
 
@@ -189,8 +193,6 @@ for i in range(3):
     # Cut Compute Windows
     # ~~~~~~~~~~~~~~~~~~~
     #
-
-    from braindecode.preprocessing import create_fixed_length_windows
 
     # Create windows using braindecode function for this. It needs parameters to define how
     # trials should be used.
@@ -257,12 +259,6 @@ for i in range(3):
     #    cross validation on your training data.
     #
 
-    from skorch.callbacks import LRScheduler
-    from skorch.helper import predefined_split
-
-    from braindecode.training import TimeSeriesLoss
-    from braindecode import EEGRegressor
-    from braindecode.training import CroppedTimeSeriesEpochScoring
 
     # These values we found good for shallow network for EEG MI decoding:
     lr = 0.0625 * 0.01
