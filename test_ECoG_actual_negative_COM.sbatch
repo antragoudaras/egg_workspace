@@ -3,7 +3,7 @@
 #SBATCH --nodes=1
 #SBATCH --gpus-per-node=v100:1
 #SBATCH --cpus-per-gpu=6 
-#SBATCH --mem=64G 
+#SBATCH --mem=32G 
 #SBATCH --constraint=intel
 #SBATCH --partition=batch
 #SBATCH --mail-type=ALL
@@ -14,4 +14,4 @@ set -e
 
 conda activate ../env
 
-python test_prime_BCI_IV_ECoG_negative_COM.py "$1" "$2"
+python test_prime_BCI_IV_ECoG_negative_COM.py "$@"
