@@ -18,9 +18,8 @@ if [ $# -eq 0 ]
 fi
 
 JOB_NAME=$1
-echo "$JOB_NAME"
 
-DATASET_PATH="$PROJECT_DIR"/"$JOB_NAME"
+DATASET_PATH="$SRC_DIR"/ECoG_negative_COM_optimized_params/"$JOB_NAME"
 echo "$DATASET_PATH"
 
 sbatch --job-name "$JOB_NAME" "$SRC_DIR"/test_ECoG_actual_negative_COM.sbatch --load-dataset "$DATASET_PATH"
