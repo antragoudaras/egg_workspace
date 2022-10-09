@@ -11,3 +11,6 @@
 launch_training*
 test2*
 training*
+
+#ignore folders already in ibex
+/ECoG_negative_COM_optimized_params
