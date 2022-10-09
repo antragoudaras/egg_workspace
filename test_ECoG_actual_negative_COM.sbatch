@@ -14,4 +14,4 @@ set -e
 
 conda activate ../env
 
-python test_prime_BCI_IV_ECoG_negative_COM.py "$@"
+python test_prime_BCI_IV_ECoG_negative_COM.py "$1" "$2"
