@@ -20,7 +20,9 @@ fi
 JOB_NAME=$1
 echo "$JOB_NAME"
 
-sbatch --job-name "$JOB_NAME" "$SRC_DIR"/test_ECoG_actual_negative_COM.sbatch --load-dataset "${SRC_DIR}/${JOB_NAME}"
+DATASET_PATH="$PROJECT_DIR"/"$JOB_NAME"
+
+sbatch --job-name "$JOB_NAME" "$SRC_DIR"/test_ECoG_actual_negative_COM.sbatch --load-dataset "$DATASET_PATH"
 
 
 echo "Testing 25 Shallow ConvNet arch. of BCI IV 4 negative COM"
