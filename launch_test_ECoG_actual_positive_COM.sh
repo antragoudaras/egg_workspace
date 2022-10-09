@@ -18,9 +18,11 @@ if [ $# -eq 0 ]
 fi
 
 JOB_NAME=$1
-echo "$JOB_NAME"
 
-sbatch --job-name "$JOB_NAME" "$SRC_DIR"/test_ECoG_actual_positive_COM.sbatch --load-dataset "$JOB_NAME"
+DATASET_PATH="$SRC_DIR"/ECoG_positive_COM_optimized_params/"$JOB_NAME"
+echo "$DATASET_PATH"
+
+sbatch --job-name "$JOB_NAME" "$SRC_DIR"/test_ECoG_actual_positive_COM.sbatch --load-dataset "$DATASET_PATH"
 
 
 echo "Testing 25 Shallow ConvNet arch. of BCI IV 4 positive COM"
