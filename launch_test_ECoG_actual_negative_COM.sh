@@ -22,7 +22,8 @@ echo "$JOB_NAME"
 
 DATASET_PATH="$PROJECT_DIR"/"$JOB_NAME"
 echo "$DATASET_PATH"
-# sbatch --job-name "$JOB_NAME" "$SRC_DIR"/test_ECoG_actual_negative_COM.sbatch --load-dataset "$DATASET_PATH"
+
+sbatch --job-name "$JOB_NAME" "$SRC_DIR"/test_ECoG_actual_negative_COM.sbatch --load-dataset "$DATASET_PATH"
 
 
 echo "Testing 25 Shallow ConvNet arch. of BCI IV 4 negative COM"
