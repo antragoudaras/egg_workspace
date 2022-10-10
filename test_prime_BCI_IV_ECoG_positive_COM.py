@@ -511,7 +511,7 @@ for j in range(25):
         # weight_decay = 0
 
         lr = df.iloc[j]['param_7']
-        weight_decay = df.iloc[j+1]['param_8']
+        weight_decay = df.iloc[j]['param_8']
         
         # For deep4 they should be:
         # lr = 1 * 0.01
