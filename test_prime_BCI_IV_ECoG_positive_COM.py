@@ -583,4 +583,4 @@ else:
 
 prefix = prefix1 + "_" + prefix2
 
-df.to_excel(f"{prefix}BCI_IV_4_ECoG_actual_results_positive_COM.xlsx")
+df.to_excel(f"{prefix}_BCI_IV_4_ECoG_actual_results_positive_COM.xlsx")
