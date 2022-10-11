@@ -552,7 +552,7 @@ for j in range(25):
         ######################################################################
         # Model training for a specified number of epochs. ``y`` is None as it is already supplied
         # in the dataset.
-        print("ARCHITECTURE ",j, "SUBJECT ", i+1)
+        print("ARCHITECTURE ",j+1, "SUBJECT ", i+1)
         regressor.fit(train_set, y=None, epochs=n_epochs)
 
         results_columns = ['r2_train', 'r2_valid', 'train_loss', 'valid_loss']

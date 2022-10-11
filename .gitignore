@@ -11,3 +11,6 @@
 launch_training*
 test2*
 training*
+
+#ignore final_dataset produced by random sampling (8000 lines)
+final_dataset_ECoG.xlsx
