@@ -1,9 +1,9 @@
 #!/bin/bash --login
-#SBATCH --time=20:00:00
+#SBATCH --time=12:00:00
 #SBATCH --nodes=1
 #SBATCH --gpus-per-node=v100:1
 #SBATCH --cpus-per-gpu=6 
-#SBATCH --mem=64G 
+#SBATCH --mem=20G 
 #SBATCH --constraint=intel
 #SBATCH --partition=batch
 #SBATCH --mail-type=ALL
