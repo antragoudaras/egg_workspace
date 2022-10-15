@@ -7,8 +7,8 @@
 #SBATCH --constraint=intel
 #SBATCH --partition=batch
 #SBATCH --mail-type=ALL
-#SBATCH --output=./ECoG_recovering_actual_accuracy_r2_scores_positive_COM_logs/%x-%j-slurm.out
-#SBATCH --error=./ECoG_recovering_actual_accuracy_r2_scores_positive_COM_logs/%x-%j-slurm.err
+#SBATCH --output=./new_ECoG_recovering_actual_accuracy_r2_scores_positive_COM_logs/%x-%j-slurm.out
+#SBATCH --error=./new_ECoG_recovering_actual_accuracy_r2_scores_positive_COM_logs/%x-%j-slurm.err
 
 set -e
 

@@ -139,11 +139,13 @@ def squeeze_final_output(x):
     return x
 
 df = pd.read_excel(args.load_dataset, index_col=0)
+num_of_archs = df.__len__()
 
-accuracy = [0.66,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
+accuracy = [0.66]
+accuracy.extend([0.0 for _ in range(num_of_archs-1)])
 df['accuracy'] = accuracy
 
-for j in range(25):
+for j in range(num_of_archs):
     print("ARCHITECTURE", j+1)
     class kostas(nn.Sequential):
         """Shallow ConvNet model from Schirrmeister et al 2017.
@@ -583,4 +585,4 @@ else:
 
 prefix = prefix1 + "_" + prefix2
 
-df.to_excel(f"{prefix}_BCI_IV_4_ECoG_actual_results_positive_COM.xlsx")
+df.to_excel(f"new_{prefix}_BCI_IV_4_ECoG_actual_results_positive_COM.xlsx")
