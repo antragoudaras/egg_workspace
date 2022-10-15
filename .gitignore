@@ -4,7 +4,7 @@
 *.docx
 #ignore pngs
 *.png
-#ignore unwaned/old files
+#ignore unwanted/old files
 *.ipynb
 
 #ingore files & folders
@@ -14,3 +14,5 @@ training*
 
 #ignore final_dataset produced by random sampling (8000 lines)
 final_dataset_ECoG.xlsx
+
+.vscode/
