@@ -11,6 +11,7 @@ SRC_DIR="$PROJECT_DIR"
 JOB_RESULTS_DIR="$PROJECT_DIR"/manual_testing_BCI_IV_2a_high_freq_logs
 mkdir -p "$JOB_RESULTS_DIR"
 
+JOB_NAME=manual_testing_BCI_IV_2a_high_freq
 
 sbatch --job-name "$JOB_NAME" "$SRC_DIR"/manual_test_BCI_2a_high_freq.sbatch
 
