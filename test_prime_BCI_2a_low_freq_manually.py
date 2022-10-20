@@ -179,11 +179,11 @@ class kostas(nn.Sequential):
 		in_chans,
 		n_classes,
 		input_window_samples=None,
-		n_filters_time=36,
-		filter_time_length=30,
-		n_filters_spat=31,
-		pool_time_length=51,
-		pool_time_stride=29,
+		n_filters_time=25,
+		filter_time_length=31,
+		n_filters_spat=49,
+		pool_time_length=62,
+		pool_time_stride=28,
 		final_conv_length=30,
 		conv_nonlin=square,
 		pool_mode="mean",
@@ -312,7 +312,7 @@ for i in range(9):
 	subject_id = i+1
 	dataset = MOABBDataset(dataset_name="BNCI2014001", subject_ids=[subject_id])
 
-	low_cut_hz = 4.  # low cut frequency for filtering
+	low_cut_hz = 0.  # low cut frequency for filtering
 	high_cut_hz = 38.  # high cut frequency for filtering
 	# Parameters for exponential moving standardization
 	factor_new = 1e-3
@@ -389,15 +389,15 @@ for i in range(9):
 	valid_set = splitted['session_E']
 
 	# These values we found good for shallow network:
-	lr = 0.0225
-	weight_decay = 0
+	lr = 0.0125
+	weight_decay = 0.00023
 
 	# For deep4 they should be:
 	# lr = 1 * 0.01
 	# weight_decay = 0.5 * 0.001
 
 	batch_size = 64
-	n_epochs = 130
+	n_epochs = 70
 
 	clf = EEGClassifier(
 		model,
