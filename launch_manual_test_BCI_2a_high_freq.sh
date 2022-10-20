@@ -8,10 +8,10 @@ PROJECT_DIR="$PWD"
 
 # project should have a src directory
 SRC_DIR="$PROJECT_DIR"
-JOB_RESULTS_DIR="$PROJECT_DIR"/manual_testing_BCI_IV_2a_low_freq_logs
+JOB_RESULTS_DIR="$PROJECT_DIR"/manual_testing_BCI_IV_2a_high_freq_logs
 mkdir -p "$JOB_RESULTS_DIR"
 
 
-sbatch --job-name "$JOB_NAME" "$SRC_DIR"/manual_test_BCI_2a_low_freq.sbatch
+sbatch --job-name "$JOB_NAME" "$SRC_DIR"/manual_test_BCI_2a_high_freq.sbatch
 
-echo "Manually testing BCI IV 2a low_freq given architectures"
+echo "Manually testing BCI IV 2a high_freq given architectures"

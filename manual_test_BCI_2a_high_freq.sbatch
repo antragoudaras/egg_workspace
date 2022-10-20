@@ -7,11 +7,11 @@
 #SBATCH --constraint=intel
 #SBATCH --partition=batch
 #SBATCH --mail-type=ALL
-#SBATCH --output=./manual_testing_BCI_IV_2a_low_freq_logs/%x-%j-slurm.out
-#SBATCH --error=./manual_testing_BCI_IV_2a_low_freq_logs/%x-%j-slurm.err
+#SBATCH --output=./manual_testing_BCI_IV_2a_high_freq_logs/%x-%j-slurm.out
+#SBATCH --error=./manual_testing_BCI_IV_2a_high_freq_logs/%x-%j-slurm.err
 
 set -e
 
 conda activate ../env
 
-python test_prime_BCI_2a_low_freq_manually.py
+python test_prime_BCI_2a_high_freq_manually.py 
