@@ -141,8 +141,9 @@ def squeeze_final_output(x):
     if x.size()[2] == 1:
         x = x[:, :, 0]
     return x
-#update r2 valid score / accuracy
-d = {'n_filters_time': [40], 'filter_time_length': [25], 'n_filters_spat': [40], 'pool_time_length': [75], 'pool_time_stride': [15], 'drop_prob': [0.5], 'learning_rate_range': [0.0625], 'decay_range': [0], 'accuracy': [0.66872591]}
+
+d = {'n_filters_time': [40,40,40], 'filter_time_length': [25,25,25], 'n_filters_spat': [40,40,40], 'pool_time_length': [75,75,75], 'pool_time_stride': [15,15,15], 'drop_prob': [0.5,0.5,0.5], 'learning_rate_range': [0.0625,0.0625,0.0625], 'decay_range': [0,0,0], 'accuracy': [0.62988486283,0.58732573815,0.78896725972], 'subject_id': [1,2,3]}
+
 df = pd.DataFrame(data=d)
 
 n_filters_time = list((range(25,55)))
@@ -154,17 +155,23 @@ drop_prob = list((np.linspace(0.2,0.8,7)))
 learning_rate_range = list((np.linspace(0.0125, 0.0925, 9)))
 decay_range = list(np.linspace(0, 0.0009, 9))
 
-for j in range(100):
-    df2 = pd.DataFrame({'n_filters_time': [n_filters_time[random.randint(0,len(n_filters_time)-1)]], 'filter_time_length': [filter_time_length[random.randint(0,len(filter_time_length)-1)]], 'n_filters_spat': [n_filters_spat[random.randint(0,len(n_filters_spat)-1)]], 'pool_time_length': [pool_time_length[random.randint(0,len(pool_time_length)-1)]], 'pool_time_stride': [pool_time_stride[random.randint(0,len(pool_time_stride)-1)]], 'drop_prob': [drop_prob[random.randint(0,len(drop_prob)-1)]], 'learning_rate_range': [learning_rate_range[random.randint(0,len(learning_rate_range)-1)]], 'decay_range': [decay_range[random.randint(0,len(decay_range)-1)]]})
-    df = pd.concat([df, df2], ignore_index = True, axis = 0)
+# for j in range(100):
+#     df2 = pd.DataFrame({'n_filters_time': [n_filters_time[random.randint(0,len(n_filters_time)-1)]], 'filter_time_length': [filter_time_length[random.randint(0,len(filter_time_length)-1)]], 'n_filters_spat': [n_filters_spat[random.randint(0,len(n_filters_spat)-1)]], 'pool_time_length': [pool_time_length[random.randint(0,len(pool_time_length)-1)]], 'pool_time_stride': [pool_time_stride[random.randint(0,len(pool_time_stride)-1)]], 'drop_prob': [drop_prob[random.randint(0,len(drop_prob)-1)]], 'learning_rate_range': [learning_rate_range[random.randint(0,len(learning_rate_range)-1)]], 'decay_range': [decay_range[random.randint(0,len(decay_range)-1)]]})
+#     df = pd.concat([df, df2], ignore_index = True, axis = 0)
 
 dfCopy = df.copy()
 dfCopy.to_excel(f"copy_initial_{args.save_dataset}")
+
+subjects_num = 3
 
 start = time.time()
 
 for j in range(100):
     print("ARCHITECTURE", j+1)
+    df2 = pd.DataFrame({'n_filters_time': [n_filters_time[random.randint(0,len(n_filters_time)-1)]], 'filter_time_length': [filter_time_length[random.randint(0,len(filter_time_length)-1)]], 'n_filters_spat': [n_filters_spat[random.randint(0,len(n_filters_spat)-1)]], 'pool_time_length': [pool_time_length[random.randint(0,len(pool_time_length)-1)]], 'pool_time_stride': [pool_time_stride[random.randint(0,len(pool_time_stride)-1)]], 'drop_prob': [drop_prob[random.randint(0,len(drop_prob)-1)]], 'learning_rate_range': [learning_rate_range[random.randint(0,len(learning_rate_range)-1)]], 'decay_range': [decay_range[random.randint(0,len(decay_range)-1)]]})
+    for _ in range(subjects_num):
+        df = pd.concat([df,df2], ignore_index=True, axis=0)
+
     class kostas(nn.Sequential):
         """Shallow ConvNet model from Schirrmeister et al 2017.
         Model described in [Schirrmeister2017]_.
@@ -314,9 +321,9 @@ for j in range(100):
             init.xavier_uniform_(self.conv_classifier.weight, gain=1)
             init.constant_(self.conv_classifier.bias, 0)
     
-    avgList = []
+    # avgList = []
 
-    for i in range(3):
+    for i in range(subjects_num):
         subject_id = i+1
         dataset = BCICompetitionIVDataset4(subject_ids=[subject_id])
 
@@ -578,13 +585,15 @@ for j in range(100):
         results_columns = ['r2_train', 'r2_valid', 'train_loss', 'valid_loss']
         score_df = pd.DataFrame(regressor.history[:, results_columns], columns=results_columns,
                                 index=regressor.history[:, 'epoch'])
-        avgList.append(score_df.r2_valid[n_epochs])
+        # avgList.append(score_df.r2_valid[n_epochs])
+        df.at[j+subjects_num+subject_id, 'accuracy'] = score_df.r2_valid[n_epochs]
+        df.at[j+subjects_num+subject_id, 'subject_id'] = subject_id
     
-    def Average(lst):
-        return sum(lst) / len(lst)
+    # def Average(lst):
+    #     return sum(lst) / len(lst)
 
-    average = Average(avgList)
-    df.at[j+1, 'accuracy'] = average
+    # average = Average(avgList)
+    # df.at[j+1, 'accuracy'] = average
 
 df.to_excel(args.save_dataset)
 end = time.time()
