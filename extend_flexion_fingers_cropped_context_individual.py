@@ -32,118 +32,8 @@ parser.add_argument("--save-dataset", type=str, default='./dataset_bci_iv_4_ECoG
 args = parser.parse_args()
 
 
-
-def np_to_th(
-    X, requires_grad=False, dtype=None, pin_memory=False, **tensor_kwargs
-):
-    """
-    Convenience function to transform numpy array to `torch.Tensor`.
-
-    Converts `X` to ndarray using asarray if necessary.
-
-    Parameters
-    ----------
-    X: ndarray or list or number
-        Input arrays
-    requires_grad: bool
-        passed on to Variable constructor
-    dtype: numpy dtype, optional
-    var_kwargs:
-        passed on to Variable constructor
-
-    Returns
-    -------
-    var: `torch.Tensor`
-    """
-    if not hasattr(X, "__len__"):
-        X = [X]
-    X = np.asarray(X)
-    if dtype is not None:
-        X = X.astype(dtype)
-    X_tensor = torch.tensor(X, requires_grad=requires_grad, **tensor_kwargs)
-    if pin_memory:
-        X_tensor = X_tensor.pin_memory()
-    return X_tensor
-
-class Expression(nn.Module):
-    """Compute given expression on forward pass.
-
-    Parameters
-    ----------
-    expression_fn : callable
-        Should accept variable number of objects of type
-        `torch.autograd.Variable` to compute its output.
-    """
-
-    def __init__(self, expression_fn):
-        super(Expression, self).__init__()
-        self.expression_fn = expression_fn
-
-    def forward(self, *x):
-        return self.expression_fn(*x)
-
-    def __repr__(self):
-        if hasattr(self.expression_fn, "func") and hasattr(
-            self.expression_fn, "kwargs"
-        ):
-            expression_str = "{:s} {:s}".format(
-                self.expression_fn.func.__name__, str(self.expression_fn.kwargs)
-            )
-        elif hasattr(self.expression_fn, "__name__"):
-            expression_str = self.expression_fn.__name__
-        else:
-            expression_str = repr(self.expression_fn)
-        return (
-            self.__class__.__name__ +
-            "(expression=%s) " % expression_str
-        )
-
-class Ensure4d(nn.Module):
-    def forward(self, x):
-        while(len(x.shape) < 4):
-            x = x.unsqueeze(-1)
-        return x
-
-def safe_log(x, eps=1e-6):
-    """ Prevents :math:`log(0)` by using :math:`log(max(x, eps))`."""
-    return torch.log(torch.clamp(x, min=eps))
-
-def square(x):
-    return x * x
-
-
-
-def transpose_time_to_spat(x):
-    """Swap time and spatial dimensions.
-
-    Returns
-    -------
-    x: torch.Tensor
-        tensor in which last and first dimensions are swapped
-    """
-    return x.permute(0, 3, 2, 1)
-
-
-
-def squeeze_final_output(x):
-    """Removes empty dimension at end and potentially removes empty time
-     dimension. It does  not just use squeeze as we never want to remove
-     first dimension.
-
-    Returns
-    -------
-    x: torch.Tensor
-        squeezed tensor
-    """
-
-    assert x.size()[3] == 1
-    x = x[:, :, :, 0]
-    if x.size()[2] == 1:
-        x = x[:, :, 0]
-    return x
-
-# d = {'n_filters_time': [40,40,40], 'filter_time_length': [25,25,25], 'n_filters_spat': [40,40,40], 'pool_time_length': [75,75,75], 'pool_time_stride': [15,15,15], 'drop_prob': [0.5,0.5,0.5], 'learning_rate_range': [0.0625,0.0625,0.0625], 'decay_range': [0,0,0], 'accuracy': [0.62988486283,0.58732573815,0.78896725972], 'subject_id': [1,2,3]}
-d = {'n_filters_time': [40], 'filter_time_length': [25], 'n_filters_spat': [40], 'pool_time_length': [75], 'pool_time_stride': [15], 'drop_prob': [0.5], 'learning_rate_range': [0.0625], 'decay_range': [0], 'accuracy': [0.6687259111146191]}
+d = {'n_filters_time': [40,40,40], 'filter_time_length': [25,25,25], 'n_filters_spat': [40,40,40], 'pool_time_length': [75,75,75], 'pool_time_stride': [15,15,15], 'drop_prob': [0.5,0.5,0.5], 'learning_rate_range': [0.0625,0.0625,0.0625], 'decay_range': [0,0,0], 'accuracy': [0.62988486283,0.58732573815,0.78896725972], 'subject_id': [1,2,3]}
+# d = {'n_filters_time': [40], 'filter_time_length': [25], 'n_filters_spat': [40], 'pool_time_length': [75], 'pool_time_stride': [15], 'drop_prob': [0.5], 'learning_rate_range': [0.0625], 'decay_range': [0], 'accuracy': [0.6687259111146191]}
 
 df = pd.DataFrame(data=d)
 
@@ -156,9 +46,9 @@ drop_prob = list((np.linspace(0.2,0.8,7)))
 learning_rate_range = list((np.linspace(0.0125, 0.0925, 9)))
 decay_range = list(np.linspace(0, 0.0009, 9))
 
-for j in range(100):
-    df2 = pd.DataFrame({'n_filters_time': [n_filters_time[random.randint(0,len(n_filters_time)-1)]], 'filter_time_length': [filter_time_length[random.randint(0,len(filter_time_length)-1)]], 'n_filters_spat': [n_filters_spat[random.randint(0,len(n_filters_spat)-1)]], 'pool_time_length': [pool_time_length[random.randint(0,len(pool_time_length)-1)]], 'pool_time_stride': [pool_time_stride[random.randint(0,len(pool_time_stride)-1)]], 'drop_prob': [drop_prob[random.randint(0,len(drop_prob)-1)]], 'learning_rate_range': [learning_rate_range[random.randint(0,len(learning_rate_range)-1)]], 'decay_range': [decay_range[random.randint(0,len(decay_range)-1)]]})
-    df = pd.concat([df, df2], ignore_index = True, axis = 0)
+# for j in range(100):
+#     df2 = pd.DataFrame({'n_filters_time': [n_filters_time[random.randint(0,len(n_filters_time)-1)]], 'filter_time_length': [filter_time_length[random.randint(0,len(filter_time_length)-1)]], 'n_filters_spat': [n_filters_spat[random.randint(0,len(n_filters_spat)-1)]], 'pool_time_length': [pool_time_length[random.randint(0,len(pool_time_length)-1)]], 'pool_time_stride': [pool_time_stride[random.randint(0,len(pool_time_stride)-1)]], 'drop_prob': [drop_prob[random.randint(0,len(drop_prob)-1)]], 'learning_rate_range': [learning_rate_range[random.randint(0,len(learning_rate_range)-1)]], 'decay_range': [decay_range[random.randint(0,len(decay_range)-1)]]})
+#     df = pd.concat([df, df2], ignore_index = True, axis = 0)
 
 dfCopy = df.copy()
 dfCopy.to_excel(f"copy_initial_{args.save_dataset}")
@@ -169,160 +59,11 @@ start = time.time()
 
 for j in range(100):
     print("ARCHITECTURE", j+1)
-    # df2 = pd.DataFrame({'n_filters_time': [n_filters_time[random.randint(0,len(n_filters_time)-1)]], 'filter_time_length': [filter_time_length[random.randint(0,len(filter_time_length)-1)]], 'n_filters_spat': [n_filters_spat[random.randint(0,len(n_filters_spat)-1)]], 'pool_time_length': [pool_time_length[random.randint(0,len(pool_time_length)-1)]], 'pool_time_stride': [pool_time_stride[random.randint(0,len(pool_time_stride)-1)]], 'drop_prob': [drop_prob[random.randint(0,len(drop_prob)-1)]], 'learning_rate_range': [learning_rate_range[random.randint(0,len(learning_rate_range)-1)]], 'decay_range': [decay_range[random.randint(0,len(decay_range)-1)]]})
-    # for _ in range(subjects_num):
-    #     df = pd.concat([df,df2], ignore_index=True, axis=0)
-
-    class kostas(nn.Sequential):
-        """Shallow ConvNet model from Schirrmeister et al 2017.
-        Model described in [Schirrmeister2017]_.
-        Parameters
-        ----------
-        in_chans : int
-            XXX
-        References
-        ----------
-        .. [Schirrmeister2017] Schirrmeister, R. T., Springenberg, J. T., Fiederer,
-           L. D. J., Glasstetter, M., Eggensperger, K., Tangermann, M., Hutter, F.
-           & Ball, T. (2017).
-           Deep learning with convolutional neural networks for EEG decoding and
-           visualization.
-           Human Brain Mapping , Aug. 2017.
-           Online: http://dx.doi.org/10.1002/hbm.23730
-        """
-
-        def __init__(
-            self,
-            in_chans,
-            n_classes,
-            input_window_samples=None,
-            n_filters_time=int(df.iloc[j+1]['n_filters_time']),
-            filter_time_length=int(df.iloc[j+1]['filter_time_length']),
-            n_filters_spat=int(df.iloc[j+1]['n_filters_spat']),
-            pool_time_length=int(df.iloc[j+1]['pool_time_length']),
-            pool_time_stride=int(df.iloc[j+1]['pool_time_stride']),
-            final_conv_length=30,
-            conv_nonlin=square,
-            pool_mode="mean",
-            pool_nonlin=safe_log,
-            split_first_layer=True,
-            batch_norm=True,
-            batch_norm_alpha=0.1,
-            drop_prob=df.iloc[j+1]['drop_prob'],
-        ):
-            super().__init__()
-            if final_conv_length == "auto":
-                assert input_window_samples is not None
-            self.in_chans = in_chans
-            self.n_classes = n_classes
-            self.input_window_samples = input_window_samples
-            self.n_filters_time = n_filters_time
-            self.filter_time_length = filter_time_length
-            self.n_filters_spat = n_filters_spat
-            self.pool_time_length = pool_time_length
-            self.pool_time_stride = pool_time_stride
-            self.final_conv_length = final_conv_length
-            self.conv_nonlin = conv_nonlin
-            self.pool_mode = pool_mode
-            self.pool_nonlin = pool_nonlin
-            self.split_first_layer = split_first_layer
-            self.batch_norm = batch_norm
-            self.batch_norm_alpha = batch_norm_alpha
-            self.drop_prob = drop_prob
-
-            self.add_module("ensuredims", Ensure4d())
-            pool_class = dict(max=nn.MaxPool2d, mean=nn.AvgPool2d)[self.pool_mode]
-            if self.split_first_layer:
-                self.add_module("dimshuffle", Expression(transpose_time_to_spat))
-                self.add_module(
-                    "conv_time",
-                    nn.Conv2d(
-                        1,
-                        self.n_filters_time,
-                        (self.filter_time_length, 1),
-                        stride=1,
-                    ),
-                )
-                self.add_module(
-                    "conv_spat",
-                    nn.Conv2d(
-                        self.n_filters_time,
-                        self.n_filters_spat,
-                        (1, self.in_chans),
-                        stride=1,
-                        bias=not self.batch_norm,
-                    ),
-                )
-                n_filters_conv = self.n_filters_spat
-            else:
-                self.add_module(
-                    "conv_time",
-                    nn.Conv2d(
-                        self.in_chans,
-                        self.n_filters_time,
-                        (self.filter_time_length, 1),
-                        stride=1,
-                        bias=not self.batch_norm,
-                    ),
-                )
-                n_filters_conv = self.n_filters_time
-            if self.batch_norm:
-                self.add_module(
-                    "bnorm",
-                    nn.BatchNorm2d(
-                        n_filters_conv, momentum=self.batch_norm_alpha, affine=True
-                    ),
-                )
-            self.add_module("conv_nonlin_exp", Expression(self.conv_nonlin))
-            self.add_module(
-                "pool",
-                pool_class(
-                    kernel_size=(self.pool_time_length, 1),
-                    stride=(self.pool_time_stride, 1),
-                ),
-            )
-            self.add_module("pool_nonlin_exp", Expression(self.pool_nonlin))
-            self.add_module("drop", nn.Dropout(p=self.drop_prob))
-            self.eval()
-            if self.final_conv_length == "auto":
-                out = self(
-                    np_to_th(
-                        np.ones(
-                            (1, self.in_chans, self.input_window_samples, 1),
-                            dtype=np.float32,
-                        )
-                    )
-                )
-                n_out_time = out.cpu().data.numpy().shape[2]
-                self.final_conv_length = n_out_time
-            self.add_module(
-                "conv_classifier",
-                nn.Conv2d(
-                    n_filters_conv,
-                    self.n_classes,
-                    (self.final_conv_length, 1),
-                    bias=True,
-                ),
-            )
-            self.add_module("softmax", nn.LogSoftmax(dim=1))
-            self.add_module("squeeze", Expression(squeeze_final_output))
-
-            # Initialization, xavier is same as in paper...
-            init.xavier_uniform_(self.conv_time.weight, gain=1)
-            # maybe no bias in case of no split layer and batch norm
-            if self.split_first_layer or (not self.batch_norm):
-                init.constant_(self.conv_time.bias, 0)
-            if self.split_first_layer:
-                init.xavier_uniform_(self.conv_spat.weight, gain=1)
-                if not self.batch_norm:
-                    init.constant_(self.conv_spat.bias, 0)
-            if self.batch_norm:
-                init.constant_(self.bnorm.weight, 1)
-                init.constant_(self.bnorm.bias, 0)
-            init.xavier_uniform_(self.conv_classifier.weight, gain=1)
-            init.constant_(self.conv_classifier.bias, 0)
+    df2 = pd.DataFrame({'n_filters_time': [n_filters_time[random.randint(0,len(n_filters_time)-1)]], 'filter_time_length': [filter_time_length[random.randint(0,len(filter_time_length)-1)]], 'n_filters_spat': [n_filters_spat[random.randint(0,len(n_filters_spat)-1)]], 'pool_time_length': [pool_time_length[random.randint(0,len(pool_time_length)-1)]], 'pool_time_stride': [pool_time_stride[random.randint(0,len(pool_time_stride)-1)]], 'drop_prob': [drop_prob[random.randint(0,len(drop_prob)-1)]], 'learning_rate_range': [learning_rate_range[random.randint(0,len(learning_rate_range)-1)]], 'decay_range': [decay_range[random.randint(0,len(decay_range)-1)]]})
+    for _ in range(subjects_num):
+        df = pd.concat([df,df2], ignore_index=True, axis=0)
     
-    avgList = []
+    # avgList = []
 
     for i in range(subjects_num):
         subject_id = i+1
@@ -453,10 +194,16 @@ for j in range(100):
         # Extract number of chans and time steps from dataset
         n_chans = train_set[0][0].shape[0] - 5
 
-        model = kostas(
+        model = ShallowFBCSPNet(
             n_chans,
             n_classes,
             final_conv_length=2,
+            n_filters_time=int(df.iloc[j+subjects_num+i]['n_filters_time']),
+            filter_time_length=int(df.iloc[j+subjects_num+i]['filter_time_length']),
+            n_filters_spat=int(df.iloc[j+subjects_num+i]['n_filters_spat']),
+            pool_time_length=int(df.iloc[j+subjects_num+i]['pool_time_length']),
+            pool_time_stride=int(df.iloc[j+subjects_num+i]['pool_time_stride']),
+            drop_prob=df.iloc[j+subjects_num+i]['drop_prob']
         )
 
         # We are removing the softmax layer to make it a regression model
@@ -538,9 +285,9 @@ for j in range(100):
         # lr = 0.0625 * 0.01
         # weight_decay = 0
 
-        lr = df.iloc[j+1]['learning_rate_range']
+        lr = df.iloc[j+subjects_num+i]['learning_rate_range']
         # lr = df.iloc[j+1]['learning_rate_range'] * 0.01 #rember to test it with 0.01 multiplyer
-        weight_decay = df.iloc[j+1]['decay_range']
+        weight_decay = df.iloc[j+subjects_num+i]['decay_range']
         
         # For deep4 they should be:
         # lr = 1 * 0.01
@@ -586,15 +333,15 @@ for j in range(100):
         results_columns = ['r2_train', 'r2_valid', 'train_loss', 'valid_loss']
         score_df = pd.DataFrame(regressor.history[:, results_columns], columns=results_columns,
                                 index=regressor.history[:, 'epoch'])
-        avgList.append(score_df.r2_valid[n_epochs])
-        # df.at[j+subjects_num+subject_id, 'accuracy'] = score_df.r2_valid[n_epochs]
-        # df.at[j+subjects_num+subject_id, 'subject_id'] = subject_id
+        # avgList.append(score_df.r2_valid[n_epochs])
+        df.at[j+subjects_num+i, 'accuracy'] = score_df.r2_valid[n_epochs]
+        df.at[j+subjects_num+i, 'subject_id'] = subject_id
     
-    def Average(lst):
-        return sum(lst) / len(lst)
+    # def Average(lst):
+    #     return sum(lst) / len(lst)
 
-    average = Average(avgList)
-    df.at[j+1, 'accuracy'] = average
+    # average = Average(avgList)
+    # df.at[j+1, 'accuracy'] = average
 
 df.to_excel(args.save_dataset)
 end = time.time()
