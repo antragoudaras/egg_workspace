@@ -54,10 +54,11 @@ dfCopy = df.copy()
 dfCopy.to_excel(f"copy_initial_{args.save_dataset}")
 
 subjects_num = 3
+num_arch_explored = 10
 
 start = time.time()
 
-for j in range(100):
+for j in range(num_arch_explored):
     print("ARCHITECTURE", j+1)
     df2 = pd.DataFrame({'n_filters_time': [n_filters_time[random.randint(0,len(n_filters_time)-1)]], 'filter_time_length': [filter_time_length[random.randint(0,len(filter_time_length)-1)]], 'n_filters_spat': [n_filters_spat[random.randint(0,len(n_filters_spat)-1)]], 'pool_time_length': [pool_time_length[random.randint(0,len(pool_time_length)-1)]], 'pool_time_stride': [pool_time_stride[random.randint(0,len(pool_time_stride)-1)]], 'drop_prob': [drop_prob[random.randint(0,len(drop_prob)-1)]], 'learning_rate_range': [learning_rate_range[random.randint(0,len(learning_rate_range)-1)]], 'decay_range': [decay_range[random.randint(0,len(decay_range)-1)]]})
     for _ in range(subjects_num):
@@ -198,12 +199,12 @@ for j in range(100):
             n_chans,
             n_classes,
             final_conv_length=2,
-            n_filters_time=int(df.iloc[j+subjects_num+i]['n_filters_time']),
-            filter_time_length=int(df.iloc[j+subjects_num+i]['filter_time_length']),
-            n_filters_spat=int(df.iloc[j+subjects_num+i]['n_filters_spat']),
-            pool_time_length=int(df.iloc[j+subjects_num+i]['pool_time_length']),
-            pool_time_stride=int(df.iloc[j+subjects_num+i]['pool_time_stride']),
-            drop_prob=df.iloc[j+subjects_num+i]['drop_prob']
+            n_filters_time=int(df.iloc[(j+1)*subjects_num+i]['n_filters_time']),
+            filter_time_length=int(df.iloc[(j+1)*subjects_num+i]['filter_time_length']),
+            n_filters_spat=int(df.iloc[(j+1)*subjects_num+i]['n_filters_spat']),
+            pool_time_length=int(df.iloc[(j+1)*subjects_num+i]['pool_time_length']),
+            pool_time_stride=int(df.iloc[(j+1)*subjects_num+i]['pool_time_stride']),
+            drop_prob=df.iloc[(j+1)*subjects_num+i]['drop_prob']
         )
 
         # We are removing the softmax layer to make it a regression model
@@ -285,16 +286,16 @@ for j in range(100):
         # lr = 0.0625 * 0.01
         # weight_decay = 0
 
-        lr = df.iloc[j+subjects_num+i]['learning_rate_range']
+        lr = df.iloc[(j+1)*subjects_num+i]['learning_rate_range']
         # lr = df.iloc[j+1]['learning_rate_range'] * 0.01 #rember to test it with 0.01 multiplyer
-        weight_decay = df.iloc[j+subjects_num+i]['decay_range']
+        weight_decay = df.iloc[(j+1)*subjects_num+i]['decay_range']
         
         # For deep4 they should be:
         # lr = 1 * 0.01
         
         # weight_decay = 0.5 * 0.001
         batch_size = 64
-        n_epochs = 130
+        n_epochs = 5
 
         regressor = EEGRegressor(
             model,
@@ -334,8 +335,8 @@ for j in range(100):
         score_df = pd.DataFrame(regressor.history[:, results_columns], columns=results_columns,
                                 index=regressor.history[:, 'epoch'])
         # avgList.append(score_df.r2_valid[n_epochs])
-        df.at[j+subjects_num+i, 'accuracy'] = score_df.r2_valid[n_epochs]
-        df.at[j+subjects_num+i, 'subject_id'] = subject_id
+        df.at[(j+1)*subjects_num+i, 'accuracy'] = score_df.r2_valid[n_epochs]
+        df.at[(j+1)*subjects_num+i, 'subject_id'] = subject_id
     
     # def Average(lst):
     #     return sum(lst) / len(lst)
