@@ -46,28 +46,28 @@ drop_prob = list((np.linspace(0.2,0.8,7)))
 learning_rate_range = list((np.linspace(0.0125, 0.0925, 9)))
 decay_range = list(np.linspace(0, 0.0009, 9))
 
+subjects_num = 3
+num_arch_explored = 100
+
+for _  in range(num_arch_explored):
+    df2 = pd.DataFrame({'n_filters_time': [n_filters_time[random.randint(0,len(n_filters_time)-1)]], 'filter_time_length': [filter_time_length[random.randint(0,len(filter_time_length)-1)]], 'n_filters_spat': [n_filters_spat[random.randint(0,len(n_filters_spat)-1)]], 'pool_time_length': [pool_time_length[random.randint(0,len(pool_time_length)-1)]], 'pool_time_stride': [pool_time_stride[random.randint(0,len(pool_time_stride)-1)]], 'drop_prob': [drop_prob[random.randint(0,len(drop_prob)-1)]], 'learning_rate_range': [learning_rate_range[random.randint(0,len(learning_rate_range)-1)]], 'decay_range': [decay_range[random.randint(0,len(decay_range)-1)]]})
+    for _ in range(subjects_num):
+        df = df.append(df2, ignore_index=True)
 # for j in range(100):
 #     df2 = pd.DataFrame({'n_filters_time': [n_filters_time[random.randint(0,len(n_filters_time)-1)]], 'filter_time_length': [filter_time_length[random.randint(0,len(filter_time_length)-1)]], 'n_filters_spat': [n_filters_spat[random.randint(0,len(n_filters_spat)-1)]], 'pool_time_length': [pool_time_length[random.randint(0,len(pool_time_length)-1)]], 'pool_time_stride': [pool_time_stride[random.randint(0,len(pool_time_stride)-1)]], 'drop_prob': [drop_prob[random.randint(0,len(drop_prob)-1)]], 'learning_rate_range': [learning_rate_range[random.randint(0,len(learning_rate_range)-1)]], 'decay_range': [decay_range[random.randint(0,len(decay_range)-1)]]})
 #     df = pd.concat([df, df2], ignore_index = True, axis = 0)
 
-dfCopy = df.copy()
-dfCopy.to_excel(f"copy_initial_{args.save_dataset}")
-
-subjects_num = 3
-num_arch_explored = 10
+# dfCopy = df.copy()
+# dfCopy.to_excel(f"copy_initial_{args.save_dataset}")
+# df.to_excel(args.save_dataset)
 
 start = time.time()
 
 for j in range(num_arch_explored):
     print("ARCHITECTURE", j+1)
-    df2 = pd.DataFrame({'n_filters_time': [n_filters_time[random.randint(0,len(n_filters_time)-1)]], 'filter_time_length': [filter_time_length[random.randint(0,len(filter_time_length)-1)]], 'n_filters_spat': [n_filters_spat[random.randint(0,len(n_filters_spat)-1)]], 'pool_time_length': [pool_time_length[random.randint(0,len(pool_time_length)-1)]], 'pool_time_stride': [pool_time_stride[random.randint(0,len(pool_time_stride)-1)]], 'drop_prob': [drop_prob[random.randint(0,len(drop_prob)-1)]], 'learning_rate_range': [learning_rate_range[random.randint(0,len(learning_rate_range)-1)]], 'decay_range': [decay_range[random.randint(0,len(decay_range)-1)]]})
-    for _ in range(subjects_num):
-        df = pd.concat([df,df2], ignore_index=True, axis=0)
-    
-    # avgList = []
-
     for i in range(subjects_num):
         subject_id = i+1
+        print("SUBJECT", subject_id)
         dataset = BCICompetitionIVDataset4(subject_ids=[subject_id])
 
         ######################################################################
@@ -295,7 +295,7 @@ for j in range(num_arch_explored):
         
         # weight_decay = 0.5 * 0.001
         batch_size = 64
-        n_epochs = 5
+        n_epochs = 130
 
         regressor = EEGRegressor(
             model,
@@ -334,16 +334,10 @@ for j in range(num_arch_explored):
         results_columns = ['r2_train', 'r2_valid', 'train_loss', 'valid_loss']
         score_df = pd.DataFrame(regressor.history[:, results_columns], columns=results_columns,
                                 index=regressor.history[:, 'epoch'])
-        # avgList.append(score_df.r2_valid[n_epochs])
+        
         df.at[(j+1)*subjects_num+i, 'accuracy'] = score_df.r2_valid[n_epochs]
         df.at[(j+1)*subjects_num+i, 'subject_id'] = subject_id
     
-    # def Average(lst):
-    #     return sum(lst) / len(lst)
-
-    # average = Average(avgList)
-    # df.at[j+1, 'accuracy'] = average
-
 df.to_excel(args.save_dataset)
 end = time.time()
 
