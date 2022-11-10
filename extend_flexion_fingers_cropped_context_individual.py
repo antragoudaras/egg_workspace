@@ -53,8 +53,8 @@ decay_range = list(np.linspace(0, 0.0009, 9))
 dfCopy = df.copy()
 dfCopy.to_excel(f"copy_initial_{args.save_dataset}")
 
-subjects_num = 3
-num_arch_explored = 10
+subjects_num = 3 #patients number in specific EEG dataset
+num_arch_explored = 100
 
 start = time.time()
 
@@ -295,7 +295,7 @@ for j in range(num_arch_explored):
         
         # weight_decay = 0.5 * 0.001
         batch_size = 64
-        n_epochs = 5
+        n_epochs = 130
 
         regressor = EEGRegressor(
             model,
