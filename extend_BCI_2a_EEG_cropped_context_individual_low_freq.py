@@ -27,17 +27,18 @@ import random
 import argparse
 
 parser = argparse.ArgumentParser("Generating EEG signals for BCIC 2a Dataset parser Low Frew")
-parser.add_argument("--save-dataset", type=str, default='./initial_dataset_extend_high_freq_individual.xlsx', help="The path where the generated dataset will be stored")
+parser.add_argument("--save-dataset", type=str, default='./initial_dataset_extend_low_freq_individual.xlsx', help="The path where the generated dataset will be stored")
 args = parser.parse_args()
 
 subjects_num = 9
 # num_arch_explored = 100
-d = {'n_filters_time': [40 for _ in range(subjects_num)], 'filter_time_length': [25 for _ in range(subjects_num)], 'n_filters_spat': [40 for _ in range(subjects_num)], 'pool_time_length': [75 for _ in range(subjects_num)], 'pool_time_stride': [15 for _ in range(subjects_num)], 'drop_prob': [0.5 for _ in range(subjects_num)], 'learning_rate_range': [0.0625 for _ in range(subjects_num)], 'decay_range': [0 for _ in range(subjects_num)], 'accuracy': [], 'subject_id': []}
+d = {'n_filters_time': [40 for _ in range(subjects_num)], 'filter_time_length': [25 for _ in range(subjects_num)], 'n_filters_spat': [40 for _ in range(subjects_num)], 'pool_time_length': [75 for _ in range(subjects_num)], 'pool_time_stride': [15 for _ in range(subjects_num)], 'drop_prob': [0.5 for _ in range(subjects_num)], 'learning_rate_range': [0.0625 for _ in range(subjects_num)], 'decay_range': [0 for _ in range(subjects_num)]}
 
 df = pd.DataFrame(data=d)
 
 for i in range(subjects_num):
     subject_id = i+1
+    print("SUBJECT: {}".format(subject_id))
     dataset = MOABBDataset(dataset_name="BNCI2014001", subject_ids=[subject_id])
 
     from braindecode.preprocessing import (
@@ -157,17 +158,5 @@ for i in range(subjects_num):
     
 df.to_excel(args.save_dataset)
 
-# n_filters_time = list((range(25,55)))
-# filter_time_length = list((range(10,36)))
-# n_filters_spat = list((range(25,54)))
-# pool_time_length = list((range(50,83)))
-# pool_time_stride = list((range(10,30)))
-# drop_prob = list((np.linspace(0.2,0.8,7)))
-# learning_rate_range = list((np.linspace(0.0125, 0.0925, 9)))
-# decay_range = list(np.linspace(0, 0.0009, 9))
 
-# for _  in range(num_arch_explored):
-#     df2 = pd.DataFrame({'n_filters_time': [n_filters_time[random.randint(0,len(n_filters_time)-1)]], 'filter_time_length': [filter_time_length[random.randint(0,len(filter_time_length)-1)]], 'n_filters_spat': [n_filters_spat[random.randint(0,len(n_filters_spat)-1)]], 'pool_time_length': [pool_time_length[random.randint(0,len(pool_time_length)-1)]], 'pool_time_stride': [pool_time_stride[random.randint(0,len(pool_time_stride)-1)]], 'drop_prob': [drop_prob[random.randint(0,len(drop_prob)-1)]], 'learning_rate_range': [learning_rate_range[random.randint(0,len(learning_rate_range)-1)]], 'decay_range': [decay_range[random.randint(0,len(decay_range)-1)]]})
-#     for _ in range(subjects_num):
-#         df = df.append(df2, ignore_index=True)
 
