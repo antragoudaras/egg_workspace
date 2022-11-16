@@ -26,8 +26,8 @@ import time
 import random
 import argparse
 
-parser = argparse.ArgumentParser("Generating EEG signals for BCIC 2a Dataset parser Low Frew")
-parser.add_argument("--save-dataset", type=str, default='./initial_dataset_extend_low_freq_individual.xlsx', help="The path where the generated dataset will be stored")
+parser = argparse.ArgumentParser("Generating EEG signals for BCIC 2a Dataset parser Low Freq")
+parser.add_argument("--save-dataset", type=str, default='./initial_baselines_low_freq_per_subject.xlsx', help="The path where the generated dataset will be stored")
 args = parser.parse_args()
 
 subjects_num = 9
