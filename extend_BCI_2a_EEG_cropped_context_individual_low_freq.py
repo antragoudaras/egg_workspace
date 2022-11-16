@@ -49,6 +49,7 @@ for _  in range(num_arch_explored):
     df2 = pd.DataFrame({'n_filters_time': [n_filters_time[random.randint(0,len(n_filters_time)-1)]], 'filter_time_length': [filter_time_length[random.randint(0,len(filter_time_length)-1)]], 'n_filters_spat': [n_filters_spat[random.randint(0,len(n_filters_spat)-1)]], 'pool_time_length': [pool_time_length[random.randint(0,len(pool_time_length)-1)]], 'pool_time_stride': [pool_time_stride[random.randint(0,len(pool_time_stride)-1)]], 'drop_prob': [drop_prob[random.randint(0,len(drop_prob)-1)]], 'learning_rate_range': [learning_rate_range[random.randint(0,len(learning_rate_range)-1)]], 'decay_range': [decay_range[random.randint(0,len(decay_range)-1)]]})
     for _ in range(subjects_num):
         df = df.append(df2, ignore_index=True)
+
 start = time.time()
 
 for j in range(num_arch_explored):
@@ -177,8 +178,7 @@ for j in range(num_arch_explored):
                             index=clf.history[:, 'epoch'])
         df.at[(j+1)*subjects_num+i, 'accuracy'] = 100 * score_df.valid_accuracy[n_epochs]
         df.at[(j+1)*subjects_num+i, 'subject_id'] = subject_id
-    
+end = time.time()
+print("TIME (sec)", end-start)
+
 df.to_excel(args.save_dataset)
-
-
-
