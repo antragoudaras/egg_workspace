@@ -32,7 +32,7 @@ args = parser.parse_args()
 
 subjects_num = 9
 num_arch_explored = 100
-d = {'n_filters_time': [40 for _ in range(subjects_num)], 'filter_time_length': [25 for _ in range(subjects_num)], 'n_filters_spat': [40 for _ in range(subjects_num)], 'pool_time_length': [75 for _ in range(subjects_num)], 'pool_time_stride': [15 for _ in range(subjects_num)], 'drop_prob': [0.5 for _ in range(subjects_num)], 'learning_rate_range': [0.0625 for _ in range(subjects_num)], 'decay_range': [0 for _ in range(subjects_num)], 'accuracy': [80.5555555555556,49.3055555555556,92.0138888888889,66.6666666666667,59.0277777777778,59.0277777777778,91.3194444444444,83.3333333333333,81.5972222222222]}
+d = {'n_filters_time': [40 for _ in range(subjects_num)], 'filter_time_length': [25 for _ in range(subjects_num)], 'n_filters_spat': [40 for _ in range(subjects_num)], 'pool_time_length': [75 for _ in range(subjects_num)], 'pool_time_stride': [15 for _ in range(subjects_num)], 'drop_prob': [0.5 for _ in range(subjects_num)], 'learning_rate_range': [0.0625 for _ in range(subjects_num)], 'decay_range': [0 for _ in range(subjects_num)], 'accuracy': [80.5555555555556,49.3055555555556,92.0138888888889,66.6666666666667,59.0277777777778,59.0277777777778,91.3194444444444,83.3333333333333,81.5972222222222], 'subject_id': [int(idx+1) for idx in range(subjects_num)]}
 
 df = pd.DataFrame(data=d)
 
