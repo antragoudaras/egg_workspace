@@ -11,7 +11,11 @@ SRC_DIR="$PROJECT_DIR"
 JOB_RESULTS_DIR="$PROJECT_DIR"/results_generate_bci_iv_2a_high_freq_dataset_contextual
 mkdir -p "$JOB_RESULTS_DIR"
 
-JOB_NAME=bci_iv_2a_low_freq_initial_baselines_high_freq
-sbatch --job-name "$JOB_NAME" "$SRC_DIR"/build_bci_2a_EEG_dataset_ibex_high_freq.sbatch
+for counter in {1..80..1}
+do
+    JOB_NAME=bci_iv_2a_high_freq_${counter}_out_of_80_contextual_november
+    echo "$JOB_NAME"
+    sbatch --job-name "$JOB_NAME" "$SRC_DIR"/build_bci_2a_EEG_dataset_ibex_high_freq.sbatch --save-dataset "${JOB_NAME}.xlsx"
+done
 
-echo "Generating baselines architectures per subject/context of BCI 2a EEG high frequency dataset"
+echo "Generating 8000 architectures per subject/context of BCI 2a EEG high frequency dataset"
