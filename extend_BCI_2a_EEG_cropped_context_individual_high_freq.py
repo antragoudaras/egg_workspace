@@ -26,7 +26,7 @@ import time
 import random
 import argparse
 
-parser = argparse.ArgumentParser("Generating EEG signals for BCIC 2a Dataset parser Low Freq")
+parser = argparse.ArgumentParser("Generating EEG signals for BCIC 2a Dataset parser High Freq Contextual")
 parser.add_argument("--save-dataset", type=str, default='./initial_baselines_high_freq_per_subject_BCI_2a_EEG.xlsx', help="The path where the generated dataset will be stored")
 args = parser.parse_args()
 
@@ -122,7 +122,7 @@ for i in range(subjects_num):
 
     # These values we found good for shallow network:
     # lr = df.iloc[i]['learning_rate_range']
-    lr = df.iloc[i+1]['learning_rate_range'] * 0.01 #rember to test it with 0.01 multiplyer
+    lr = df.iloc[i]['learning_rate_range'] * 0.01 #rember to test it with 0.01 multiplyer
     weight_decay = df.iloc[i]['decay_range']
 
     # For deep4 they should be:
