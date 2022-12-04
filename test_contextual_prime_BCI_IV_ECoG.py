@@ -316,10 +316,13 @@ for j in range(num_of_archs):
 
 prefix = None
 if "random_dataset_" in args.load_dataset:
-	prefix = "random_set"
-elif "train_dataset_" in args.load_dataset:
-	prefix = "train_set"
-elif "val_dataset_" in args.load_dataset:
-	prefix = "val_set"
+	# prefix = "random_set"
+	for counter in range(1,10):
+		if str(counter) in args.load_dataset:
+			prefix = f"random_set_{counter}"
+			break
+	prefix = None
+else:
+	exit()
 
-df.to_excel(f"{prefix}_actual_results_contextual_BCI_IV_ECoG.xlsx")
+df.to_excel(f"{prefix}_ground_truth_contextual_BCI_IV_ECoG_all_subjects.xlsx")
