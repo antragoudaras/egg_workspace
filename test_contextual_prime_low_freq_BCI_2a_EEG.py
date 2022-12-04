@@ -95,7 +95,7 @@ for j in range(num_of_archs):
 			n_filters_spat=int(df.iloc[j]['param_3']),
 			pool_time_length=int(df.iloc[j]['param_4']),
 			pool_time_stride=int(df.iloc[j]['param_5']),
-			drop_prob=df.iloc[j]['param_6']
+			drop_prob=int(df.iloc[j]['param_6'] / 10)
 		)
 
 		# Send model to GPU
