@@ -27,8 +27,8 @@ import time
 import random
 import argparse
 
-parser = argparse.ArgumentParser("Generating Low Freq parser")
-parser.add_argument("--load-dataset", type=str, default='./random_dataset_optimized_low_freq.xlsx', help="The path where the generated dataset will be stored")
+parser = argparse.ArgumentParser("Generating Low Freq parser for testing conetxual PRIME EEG low freq")
+parser.add_argument("--load-dataset", type=str, default=None, help="The path where the generated dataset will be stored")
 args = parser.parse_args()
 
 
@@ -90,12 +90,12 @@ for j in range(num_of_archs):
 			n_classes,
 			input_window_samples=input_window_samples,
 			final_conv_length=30,
-			n_filters_time=int(df.iloc[j]['n_filters_time']),
-			filter_time_length=int(df.iloc[j]['filter_time_length']),
-			n_filters_spat=int(df.iloc[j]['n_filters_spat']),
-			pool_time_length=int(df.iloc[j]['pool_time_length']),
-			pool_time_stride=int(df.iloc[j]['pool_time_stride']),
-			drop_prob=df.iloc[j]['drop_prob']
+			n_filters_time=int(df.iloc[j]['param_1']),
+			filter_time_length=int(df.iloc[j]['param_2']),
+			n_filters_spat=int(df.iloc[j]['param_3']),
+			pool_time_length=int(df.iloc[j]['param_4']),
+			pool_time_stride=int(df.iloc[j]['param_5']),
+			drop_prob=df.iloc[j]['param_6']
 		)
 
 		# Send model to GPU
@@ -175,10 +175,17 @@ for j in range(num_of_archs):
 
 prefix = None
 if "random_dataset_" in args.load_dataset:
-	prefix = "random_set"
-elif "train_dataset_" in args.load_dataset:
-	prefix = "train_set"
-elif "val_dataset_" in args.load_dataset:
-	prefix = "val_set"
+	# prefix = "random_set"
+	for counter in range(1,10):
+		if str(counter) in args.load_dataset:
+			prefix = f"random_set_{counter}"
+			break
+	prefix = None
+else:
+	exit()
+# elif "train_dataset_" in args.load_dataset:
+# 	prefix = "train_set"
+# elif "val_dataset_" in args.load_dataset:
+# 	prefix = "val_set"
 
-df.to_excel(f"{prefix}_low_freq_actual_results_contextual_BCI_2a_EEG.xlsx")
+df.to_excel(f"{prefix}_low_freq_ground_truth_results_contextual_BCI_2a_EEG.xlsx")
