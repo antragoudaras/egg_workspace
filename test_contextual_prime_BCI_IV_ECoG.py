@@ -321,7 +321,6 @@ if "random_dataset_" in args.load_dataset:
 		if str(counter) in args.load_dataset:
 			prefix = f"random_set_{counter}"
 			break
-	prefix = None
 else:
 	exit()
 
