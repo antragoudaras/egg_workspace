@@ -172,12 +172,12 @@ for j in range(num_of_archs):
 			n_chans,
 			n_classes,
 			final_conv_length=2,
-			n_filters_time=int(df.iloc[j]['n_filters_time']),
-			filter_time_length=int(df.iloc[j]['filter_time_length']),
-			n_filters_spat=int(df.iloc[j]['n_filters_spat']),
-			pool_time_length=int(df.iloc[j]['pool_time_length']),
-			pool_time_stride=int(df.iloc[j]['pool_time_stride']),
-			drop_prob=df.iloc[j]['drop_prob']
+			n_filters_time=int(df.iloc[j]['param_1']),
+			filter_time_length=int(df.iloc[j]['param_2']),
+			n_filters_spat=int(df.iloc[j]['param_3']),
+			pool_time_length=int(df.iloc[j]['param_4']),
+			pool_time_stride=int(df.iloc[j]['param_5']),
+			drop_prob=int(df.iloc[j]['param_6'] / 10)
 		)
 
 		# We are removing the softmax layer to make it a regression model
@@ -259,9 +259,9 @@ for j in range(num_of_archs):
 		# lr = 0.0625 * 0.01
 		# weight_decay = 0
 
-		lr = df.iloc[j]['learning_rate_range']
+		lr = df.iloc[j]['param_7']
 		# lr = df.iloc[j+1]['learning_rate_range'] * 0.01 #rember to test it with 0.01 multiplyer
-		weight_decay = df.iloc[j]['decay_range']
+		weight_decay = df.iloc[j]['param_8']
 		
 		# For deep4 they should be:
 		# lr = 1 * 0.01
