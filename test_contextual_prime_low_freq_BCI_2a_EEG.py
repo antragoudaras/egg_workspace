@@ -188,4 +188,4 @@ else:
 # elif "val_dataset_" in args.load_dataset:
 # 	prefix = "val_set"
 
-df.to_excel(f"{prefix}_low_freq_ground_truth_results_contextual_BCI_2a_EEG.xlsx")
+df.to_excel(f"{prefix}_low_freq_ground_truth_results_contextual_BCI_2a_EEG_all_patients.xlsx")
