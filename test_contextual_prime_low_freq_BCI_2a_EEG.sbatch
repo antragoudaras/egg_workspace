@@ -7,8 +7,8 @@
 #SBATCH --constraint=intel
 #SBATCH --partition=batch
 #SBATCH --mail-type=ALL
-#SBATCH --output=./ground_truth_contextual_prime_low_freq_BCI_2a_EEG_logs/%x-%j-slurm.out
-#SBATCH --error=./ground_truth_contextual_prime_low_freq_BCI_2a_EEG_logs/%x-%j-slurm.err
+#SBATCH --output=./ground_truth_contextual_prime_low_freq_BCI_2a_EEG_all_patients_logs/%x-%j-slurm.out
+#SBATCH --error=./ground_truth_contextual_prime_low_freq_BCI_2a_EEG_all_patients_logs/%x-%j-slurm.err
 
 set -e
 

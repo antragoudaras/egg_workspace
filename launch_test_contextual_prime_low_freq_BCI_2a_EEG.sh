@@ -8,7 +8,7 @@ PROJECT_DIR="$PWD"
 
 # project should have a src directory
 SRC_DIR="$PROJECT_DIR"
-JOB_RESULTS_DIR="$PROJECT_DIR"/ground_truth_contextual_prime_low_freq_BCI_2a_EEG_logs
+JOB_RESULTS_DIR="$PROJECT_DIR"/ground_truth_contextual_prime_low_freq_BCI_2a_EEG_all_patients_logs
 mkdir -p "$JOB_RESULTS_DIR"
 
 if [ $# -eq 0 ]
