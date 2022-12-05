@@ -321,7 +321,5 @@ if "random_dataset_" in args.load_dataset:
 		if str(counter) in args.load_dataset:
 			prefix = f"random_set_{counter}"
 			break
-else:
-	exit()
 
 df.to_excel(f"{prefix}_ground_truth_contextual_BCI_IV_ECoG_all_subjects.xlsx")
