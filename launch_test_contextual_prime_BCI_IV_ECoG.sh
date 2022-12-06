@@ -25,4 +25,4 @@ echo "$DATASET_PATH"
 sbatch --job-name "$JOB_NAME" "$SRC_DIR"/test_contextual_prime_BCI_IV_ECoG.sbatch --load-dataset "$DATASET_PATH"
 
 
-echo "Testing of 25 contextual PRIME generated archs. of BCI ECoG all subjects/multi-context optimization"
+echo "Testing of 25 contextual PRIME generated archs. of BCI ECoG all subjects/multi-context optimization. After .xlsx deletion"

@@ -316,7 +316,6 @@ for j in range(num_of_archs):
 
 prefix = None
 if "random_dataset_" in args.load_dataset:
-	# prefix = "random_set"
 	for counter in range(1,10):
 		if str(counter) in args.load_dataset:
 			prefix = f"random_set_{counter}"
