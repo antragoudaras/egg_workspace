@@ -317,7 +317,8 @@ for j in range(num_of_archs):
 prefix = None
 if "random_dataset_" in args.load_dataset:
 	for counter in range(1,10):
-		if str(counter) in args.load_dataset:
+		search_str = "_" + str(counter) + "_"
+		if search_str in args.load_dataset:
 			prefix = f"random_set_{counter}"
 			break
 
