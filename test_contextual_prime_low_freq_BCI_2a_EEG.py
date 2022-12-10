@@ -175,16 +175,10 @@ for j in range(num_of_archs):
 
 prefix = None
 if "random_dataset_" in args.load_dataset:
-	# prefix = "random_set"
 	for counter in range(1,10):
-		if str(counter) in args.load_dataset:
+		search_str = "_" + str(counter) + "_"
+		if search_str in args.load_dataset:
 			prefix = f"random_set_{counter}"
 			break
-else:
-	exit()
-# elif "train_dataset_" in args.load_dataset:
-# 	prefix = "train_set"
-# elif "val_dataset_" in args.load_dataset:
-# 	prefix = "val_set"
 
 df.to_excel(f"{prefix}_low_freq_ground_truth_results_contextual_BCI_2a_EEG_all_patients.xlsx")
