@@ -319,6 +319,9 @@ results_excel_dir = "COMs_ECoG_results"
 if not os.path.exists(results_excel_dir):
 	os.mkdir(results_excel_dir)
 
-prefix = args.load_dataset
+prefix = None
+
+if "coms_cleaned" in args.load_dataset:
+	prefix = "coms_cleaned"
 
 df.to_excel(os.path.join(results_excel_dir, f"{prefix}_ground_truth_BCI_IV_ECoG.xlsx"))
