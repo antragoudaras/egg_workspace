@@ -16,3 +16,4 @@ training*
 final_dataset_ECoG.xlsx
 
 .vscode/
+*.~lock*
