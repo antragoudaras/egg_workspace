@@ -21,9 +21,9 @@ from braindecode.preprocessing import (
 		exponential_moving_standardize, preprocess, Preprocessor)
 import pandas as pd
 import sklearn
-import time
-import random
+import os
 import argparse
+
 parser = argparse.ArgumentParser("Generating MBOs BCI IV ECoG parser")
 parser.add_argument("--load-dataset", type=str, default='./random_dataset_optimized_low_freq.xlsx', help="The path where the generated dataset will be loaded")
 args = parser.parse_args()
@@ -314,6 +314,11 @@ for j in range(num_of_archs):
 	print("Arch.{} average r2-valid across all subjects:{}".format(j+1,average))
 	df.at[j, 'accuracy'] = average
 
+results_excel_dir = "COMs_ECoG_results"
+
+if not os.path.exists(results_excel_dir):
+	os.mkdir(results_excel_dir)
+
 prefix = args.load_dataset
 
-df.to_excel(f"{prefix}_ground_truth_BCI_IV_ECoG_all_subjects.xlsx")
+df.to_excel(os.path.join(results_excel_dir, f"{prefix}_ground_truth_BCI_IV_ECoG.xlsx"))
