@@ -28,8 +28,8 @@ import random
 import os
 import argparse
 
-parser = argparse.ArgumentParser("Generating Low Freq parser for testing conetxual PRIME EEG low freq")
-parser.add_argument("--load-dataset", type=str, default=None, help="The path where the generated dataset will be stored")
+parser = argparse.ArgumentParser("Generating MBOs BCI IV EEG low freq task parser")
+parser.add_argument("--load-dataset", type=str, default=None, help="The path where the generated dataset will be loaded")
 args = parser.parse_args()
 
 
