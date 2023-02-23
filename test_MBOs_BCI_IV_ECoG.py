@@ -321,7 +321,7 @@ if not os.path.exists(results_excel_dir):
 
 prefix = None
 
-if "coms_cleaned" in args.load_dataset:
-	prefix = "coms_cleaned"
+if "coms_cleaned_ECoG" in args.load_dataset:
+	prefix = "ECoG_ground_truth"
 
 df.to_excel(os.path.join(results_excel_dir, f"{prefix}.xlsx"))
