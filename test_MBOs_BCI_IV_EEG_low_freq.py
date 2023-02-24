@@ -181,7 +181,7 @@ if not os.path.exists(results_excel_dir):
 
 prefix = None
 
-if "coms_cleaned_EEG" in args.load_dataset:
-	prefix = "EEG_low_ground_truth"
+if "coms_cleaned_EEG_low_freq_archs_overestimation-limit-0.5-particle-lr-2.0" in args.load_dataset:
+	prefix = "EEG_low_ground_truth_overestimation-limit-0.5-particle-lr-2.0"
 
 df.to_excel(os.path.join(results_excel_dir, f"{prefix}.xlsx"))
