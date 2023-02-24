@@ -314,14 +314,19 @@ for j in range(num_of_archs):
 	print("Arch.{} average r2-valid across all subjects:{}".format(j+1,average))
 	df.at[j, 'accuracy'] = average
 
-results_excel_dir = "COMs_ECoG_ground_truth"
 
-if not os.path.exists(results_excel_dir):
-    os.mkdir(results_excel_dir)
-
-prefix = None
 
 if "coms_cleaned_ECoG" in args.load_dataset:
+	results_excel_dir = "COMs_ECoG_ground_truth"
+	if not os.path.exists(results_excel_dir):
+		os.mkdir(results_excel_dir)
 	prefix = "ECoG_ground_truth"
+
+
+elif "cbas_ECoG" in args.load_dataset:
+	results_excel_dir = "CBAS_ECoG_ground_truth"
+	if not os.path.exists(results_excel_dir):
+		os.mkdir(results_excel_dir)
+	prefix = "ECoG_ground_truth_cbas_first_run"
 
 df.to_excel(os.path.join(results_excel_dir, f"{prefix}.xlsx"))
