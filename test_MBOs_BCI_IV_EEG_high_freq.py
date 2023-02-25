@@ -174,14 +174,17 @@ for j in range(num_of_archs):
 	print("Arch.{} average valid accuarcy across all subjects:{}".format(j+1,average))
 	df.at[j, 'accuracy'] = average
 
-results_excel_dir = "COMs_EEG_high_ground_truth"
+if "coms_cleaned_EEG_high_freq" in args.load_dataset:
+	results_excel_dir = "COMs_EEG_high_ground_truth"
+	if not os.path.exists(results_excel_dir):
+		os.mkdir(results_excel_dir)
+	prefix = "coms_cleaned_EEG_high_ground_truth_overestimation-limit-0.5-particle-lr-0.5"
 
-if not os.path.exists(results_excel_dir):
-    os.mkdir(results_excel_dir)
 
-prefix = None
-
-if "coms_cleaned_EEG_high_freq_archs_overestimation-limit-0.5-particle-lr-0.5" in args.load_dataset:
-	prefix = "EEG_high_ground_truth_overestimation-limit-0.5-particle-lr-0.5"
+elif "cbas_EEG_high" in args.load_dataset:
+	results_excel_dir = "CBAS_EEG_high_ground_truth"
+	if not os.path.exists(results_excel_dir):
+		os.mkdir(results_excel_dir)
+	prefix = "cbas_EEG_high_ground_truth"
 
 df.to_excel(os.path.join(results_excel_dir, f"{prefix}.xlsx"))
