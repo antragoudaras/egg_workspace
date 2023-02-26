@@ -187,4 +187,10 @@ elif "cbas_EEG_high" in args.load_dataset:
 		os.mkdir(results_excel_dir)
 	prefix = "cbas_EEG_high_ground_truth"
 
+elif "bo_qei_EEG_high" in args.load_dataset:
+	results_excel_dir = "BO_QEI_EEG_high_ground_truth"
+	if not os.path.exists(results_excel_dir):
+		os.mkdir(results_excel_dir)
+	prefix = "bo_qei_EEG_high_ground_truth_normalized"
+
 df.to_excel(os.path.join(results_excel_dir, f"{prefix}.xlsx"))
