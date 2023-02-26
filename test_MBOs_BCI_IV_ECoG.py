@@ -329,4 +329,10 @@ elif "cbas_ECoG" in args.load_dataset:
 		os.mkdir(results_excel_dir)
 	prefix = "ECoG_ground_truth_cbas_first_run"
 
+elif "bo_qei_ECoG" in args.load_dataset:
+	results_excel_dir = "BO_QEI_ECoG_ground_truth"
+	if not os.path.exists(results_excel_dir):
+		os.mkdir(results_excel_dir)
+	prefix = "bo_qei_ECoG_ground_truth_normalized"
+
 df.to_excel(os.path.join(results_excel_dir, f"{prefix}.xlsx"))
