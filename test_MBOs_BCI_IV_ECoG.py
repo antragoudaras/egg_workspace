@@ -320,7 +320,7 @@ if "coms_cleaned_ECoG" in args.load_dataset:
 	results_excel_dir = "COMs_ECoG_ground_truth"
 	if not os.path.exists(results_excel_dir):
 		os.mkdir(results_excel_dir)
-	prefix = "ECoG_ground_truth"
+	prefix = "coms_cleaned_ECoG_ground_truth_overestimation-limit-0.5-paricle-lr-0.5"
 
 
 elif "cbas_ECoG" in args.load_dataset:
